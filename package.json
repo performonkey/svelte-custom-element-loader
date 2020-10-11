@@ -13,6 +13,9 @@
   ],
   "author": "p10y",
   "license": "MIT",
+  "repository": "performonkey/svelte-custom-element-loader",
+  "homepage": "https://github.com/performonkey/svelte-custom-element-loader",
+  "bugs": "https://github.com/performonkey/svelte-custom-element-loader/issues",
   "dependencies": {
     "loader-utils": "^2.0.0"
   }
