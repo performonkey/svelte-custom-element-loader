@@ -21,28 +21,28 @@ Then add the loader to your `webpack` config. For example:
 ```js
 // webpack.config.js
 module.exports = {
-    module: {
-    rules: [
-		{
-			test: /\.svelte$/,
-			use: [
-				{
-					loader: 'svelte-custom-element-loader',
-					options: {
-						prefix: 'my',
-					}
-				},
-				{
-					loader: 'svelte-loader',
-					options: {
-						emitCss: true,
-						hotReload: process.env.NODE_ENV === 'development'
-					}
-				},
-			]
-		},
-    ],
-  },
+	module: {
+		rules: [
+			{
+				test: /\.svelte$/,
+				use: [
+					{
+						loader: 'svelte-custom-element-loader',
+						options: {
+							prefix: 'my',
+						}
+					},
+					{
+						loader: 'svelte-loader',
+						options: {
+							emitCss: true,
+							hotReload: process.env.NODE_ENV === 'development'
+						}
+					},
+				]
+			},
+		],
+	}
 };
 ```
 
