@@ -1,6 +1,6 @@
 {
   "name": "svelte-custom-element-loader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "auto register custom element by svelte file",
   "main": "index.js",
   "scripts": {
