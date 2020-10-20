@@ -57,3 +57,21 @@ Type: `String`
 Default: `my`
 
 custom-element name prefix
+
+## Slot
+
+```
+<my-container>
+	<div slot="a">dsad</div>
+	<div slot="b">dsad</div>
+	<div>default slot only have one Elment</div>
+</my-container>
+```
+
+## JSON attribute
+
+Attribute name starts with `json-` will auto parse to without prefix prop
+```
+<my-element json-data="{\"name\": \"value"}" />
+// will pass JSON.parse(json-data) to data
+```

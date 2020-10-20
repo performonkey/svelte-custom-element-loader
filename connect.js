@@ -1,3 +1,35 @@
+import { detach, insert, noop } from 'svelte/internal';
+
+function createSlots(slots) {
+    const svelteSlots = {};
+
+    for (const slotName in slots) {
+        svelteSlots[slotName] = [createSlotFn(slots[slotName])];
+    }
+
+    function createSlotFn(element) {
+        return function() {
+            return {
+                c: noop,
+
+                m: function mount(target, anchor) {
+                    insert(target, element, anchor);
+                },
+
+                d: function destroy(detaching) {
+                    if (detaching) {
+                        detach(element);
+                    }
+                },
+
+                l: noop,
+            };
+        }
+    }
+
+    return svelteSlots;
+}
+
 /**
  * Connect Web Component attributes to Svelte Component properties
  * @param {string} name Name of the Web Component
@@ -17,7 +49,8 @@ export default function connect(name, Component, attributes = []) {
 
         attributeChangedCallback(name, oldValue, newValue) {
             if (this.component && oldValue !== newValue) {
-                this.component.$set({ [name]: newValue });
+                let attrName = name.startsWith('json-') ? name.replace(/^json-/, '') : name;
+                this.component.$set({ [attrName]: newValue });
             }
         }
 
@@ -25,13 +58,38 @@ export default function connect(name, Component, attributes = []) {
             let props = {};
 
             for (const attr of attributes) {
-                props[attr] = this.getAttribute(attr) || undefined;
+                props[attr] = this.getAttrWithJson(attr) || undefined;
+            }
+
+            if (this.childNodes.length) {
+                props.$$slots = createSlots(
+                    Array.from(this.childNodes).reduce((obj, node) => {
+                        obj[node.getAttribute && node.getAttribute('slot') || 'default'] = node.cloneNode(true);
+                        node.remove();
+                        return obj;
+                    }, {})
+                );
+                props.$$scope = {};
             }
 
             this.component = new Component({
                 target: this,
                 props,
             });
+        }
+
+        getAttrWithJson(name) {
+            let attr = this.getAttribute(name);
+            if (attr) return attr;
+
+            attr = this.getAttribute(`json-${name}`);
+            if (attr) {
+                try {
+                    attr = JSON.parse(attr);
+                } catch(error) {}
+            }
+
+            return attr;
         }
     });
 }
