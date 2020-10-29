@@ -12,6 +12,14 @@ $ npm install svelte-custom-element-loader --save-dev
 
 Import (or `require`) the target file(s) in one of the bundle's files:
 
+```html
+<script>
+	export _customElementTagName_ = 'my-button';
+</script>
+
+<button>test</button>
+```
+
 ```js
 import './Button.svelte';
 ```
@@ -56,7 +64,15 @@ Type: `String`
 
 Default: `my`
 
-custom-element name prefix
+custom-element name prefix, only work with `registerAllFile` is `true`
+
+### `registerAllFile`
+
+Type: `Boolean`
+
+Default: `false`
+
+register all imported svelte file as custom element.
 
 ## Slot
 
